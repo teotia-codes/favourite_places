@@ -5,23 +5,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class PlacesListScreen extends ConsumerWidget {
+class PlacesListScreen extends ConsumerStatefulWidget {
   const PlacesListScreen({super.key});
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() {
+  return _PlaceListScreen();
+  }
+}
+class _PlaceListScreen extends ConsumerState<PlacesListScreen>{
+  
+late   Future <void> _placesFuture;
+  @override
+  void initState() {
+   
+    super.initState();
+
+    _placesFuture = ref.read(userPlaceProvider.notifier).loadPlaces();
+  }
+  @override
+  Widget build(BuildContext contex) {
     final userPlaces = ref.watch(userPlaceProvider);
     return Scaffold(
-
       appBar: AppBar(
-        
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-           
               gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Color.fromARGB(255, 5, 255, 180), Color.fromARGB(255, 250, 111, 158)])),
+                  colors: [
+                Color.fromARGB(255, 5, 255, 180),
+                Color.fromARGB(255, 250, 111, 158)
+              ])),
         ),
         title: Text(
           'Your Favourite Places',
@@ -37,7 +51,8 @@ class PlacesListScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: Padding(padding: EdgeInsets.all(6),child: PlacesList(places: userPlaces)),
+      body: Padding(
+          padding: EdgeInsets.all(6), child: FutureBuilder(future: _placesFuture,builder: (context, snapshot) => snapshot.connectionState == ConnectionState.waiting? const Center(child: CircularProgressIndicator(),): PlacesList(places: userPlaces),),),
     );
   }
 }
