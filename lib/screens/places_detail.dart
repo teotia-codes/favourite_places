@@ -14,7 +14,7 @@ class PlaceDetailScreen extends StatelessWidget {
               gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Color.fromARGB(255, 146, 247, 227), Color.fromARGB(255, 204, 235, 227)])),
+                  colors: [Color.fromARGB(255, 5, 255, 180), Color.fromARGB(255, 250, 111, 158)])),
         ),
        
         title:Text(place.title) ,
